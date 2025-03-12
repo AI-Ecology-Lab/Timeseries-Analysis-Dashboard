@@ -19,19 +19,6 @@ def get_img_as_base64(file_path):
 def main():
     set_page_config("SEAPEN Dashboard", "wide", "expanded")
     
-    image_path = os.path.join(os.path.dirname(__file__), "assets", "image.png")
-    icon_path = os.path.join(os.path.dirname(__file__), "assets", "icon_image.png")
-    
-    try:
-        st.logo(
-            image=image_path,
-            size="large",
-            link=None,
-            icon_image=icon_path
-        )
-    except Exception as e:
-        st.error(f"Error loading logo: {e}")
-
     # Load custom CSS
     load_css()
     
