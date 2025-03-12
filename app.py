@@ -103,8 +103,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Page navigation handling.
-    query_params = st.query_params()
-    if 'page' in query_params and query_params['page'][0] == 'welcome':
+    if 'page' in st.query_params and st.query_params['page'] == 'welcome':
         st.switch_page('pages/welcome.py')
 
 if __name__ == "__main__":
