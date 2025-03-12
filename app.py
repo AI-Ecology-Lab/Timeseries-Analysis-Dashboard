@@ -17,7 +17,7 @@ def get_img_as_base64(file_path):
         return None
 
 def main():
-    set_page_config("SEAPEN Dashboard", "wide", "expanded")
+    set_page_config("OceanCV Dashboard", "wide", "expanded")
     
     # Load custom CSS
     load_css()
