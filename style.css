@@ -1,0 +1,243 @@
+/* Main styling for the SEAPEN Dashboard */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
+:root {
+  --dark-blue: #000000;
+  --medium-blue: #061c2a;
+  --light-blue: #118ab2;
+  --highlight: #00b4d8;
+  --text-color: #ffffff;
+  --sidebar-bg: #262730;
+  --typing-speed: 3s;
+  --deleting-speed: 2s;
+  --delay-before-delete: 2s;
+}
+
+/* General styles */
+body {
+  background-color: var(--dark-blue);
+  margin: 0;
+  padding: 0;
+}
+
+html, body, [class*="css"] {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+/* Neural Network styling */
+#neural-network {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Between background (z-index 1) and content (z-index 3) */
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Ensure content (box) stays on top */
+.centered-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* Landing page styles */
+.main-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Dynamic text container and static parts styling */
+.title-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.dynamic-text-wrapper {
+  display: inline-block;
+  position: relative;
+  min-width: 150px;
+  margin: 0 10px;
+}
+
+.dynamic-text {
+  color: var(--highlight);
+  position: relative;
+}
+
+/* Cursor styling */
+.dynamic-text::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  height: 70%;
+  width: 3px;
+  background-color: var(--highlight);
+  transform: translateY(-50%);
+  animation: cursor-blink 0.8s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Words styling */
+.dynamic-word {
+  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0%;
+}
+
+.dynamic-word.visible {
+  display: inline-block;
+}
+
+.dynamic-word.typing {
+  animation: typing var(--typing-speed) steps(20) forwards;
+}
+
+.dynamic-word.deleting {
+  animation: deleting var(--deleting-speed) steps(20) forwards;
+}
+
+@keyframes typing {
+  from { width: 0% }
+  to { width: 100% }
+}
+
+@keyframes deleting {
+  from { width: 100% }
+  to { width: 0% }
+}
+
+/* Box styling modifications */
+.box {
+ position: relative;
+ width: 90%;
+ max-width: 850px;
+ min-height: 350px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ transition: 0.5s;
+ z-index: 2;
+ margin: 0 auto; /* Center the box */
+}
+
+.box:hover:before,
+.box:hover:after {
+ transform: skewX(0deg) scaleX(1.3);
+}
+
+.box:before,
+.box:after {
+ background: rgba(255, 255, 255, 0.05); /* Removed gradient, using translucent white */
+}
+
+.box .content {
+ position: relative;
+ width: 100%;
+ height: 100%;
+ padding: 50px;
+ background: rgba(255, 255, 255, 0.05);
+ backdrop-filter: blur(10px);
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ border-radius: 8px;
+ z-index: 1;
+ transition: all 0.5s ease;
+ color: #fff;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+}
+
+/* Mouse follower effect */
+.content {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+}
+
+.content::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at center, 
+        rgba(255,255,255,0.15) 0%, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.box:hover .content::before {
+    opacity: 1;
+}
+
+/* Ensure content stays visible */
+.box:hover .content h1,
+.box:hover .content p {
+    opacity: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Particle container styling */
+#particles-js {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ z-index: 1;
+ pointer-events: none;
+}
+
+/* Make sure background image is behind particles */
+.bg-with-image {
+ z-index: 0;
+}
+
+/* Footer styling */
+.static-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(90deg, #00ffff, #ff00ff);
+    text-align: center;
+    z-index: 1000;
+}
+
+.static-footer span {
+    color: white;
+    font-size: 16px;
+}
+
+.static-footer a {
+    color: white;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.static-footer a:hover {
+    opacity: 0.8;
+}
+

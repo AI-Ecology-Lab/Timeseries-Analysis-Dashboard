@@ -1,0 +1,361 @@
+/* Main styling for the SEAPEN Dashboard */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;700&display=swap');
+
+#main #moto {
+    font-family: 'Unbounded', cursive;
+    font-size: 45px;
+
+}
+
+#subtitle {
+    font-size: 25px;
+}
+
+.title {
+    font-size: 45px;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 40px;
+    color: #00ffff;
+}
+
+.content {
+    margin-top: 40px;
+}
+
+/* Main styling for the SEAPEN Dashboard */
+:root {
+    --dark-blue: #000000;
+    --medium-blue: #061c2a;
+    --light-blue: #118ab2;
+    --highlight: #00b4d8;
+    --text-color: #ffffff;
+    --sidebar-bg: #ffffff00;
+}
+
+body {
+    background-color: var(--dark-blue);
+    margin: 0;
+    padding: 0;
+}
+
+html, body, [class*="css"] {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/* Ensure content (box) stays on top */
+.centered-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* Landing page styles */
+.main-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 0.15em solid var(--highlight);
+    margin: 0 auto;
+    animation: typing 3.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+    max-width: 0;
+    padding: 0 20px;
+}
+
+@keyframes typing {
+    from { max-width: 0 }
+    to { max-width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--highlight) }
+}
+
+/* Box styling modifications */
+.box {
+    position: relative;
+    width: 90%;
+    max-width: 850px;
+    min-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    z-index: 2;
+    margin: 0 auto;
+    margin-top: 20px; /* Add some space from the top */
+}
+
+.box:hover:before,
+.box:hover:after {
+    transform: skewX(0deg) scaleX(1.3);
+}
+
+.box:before,
+.box:after {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.box .content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+    transition: all 0.5s ease;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Mouse follower effect */
+.content {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+}
+
+.content::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at center, 
+        rgba(255,255,255,0.15) 0%, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.box:hover .content::before {
+    opacity: 1;
+}
+
+/* Ensure content stays visible */
+.box:hover .content h1,
+.box:hover .content p {
+    opacity: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Make sure background image is behind particles */
+.bg-with-image {
+    z-index: 0;
+}
+
+/* Ensure buttons stay visible on hover */
+.box:hover .box-styled-btn {
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+/* Button styling */
+button {
+    position: relative;
+    padding: 10px 17px;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 0px 5px 0px #ffffff;
+}
+
+/* Custom styling for the Get Started button */
+[data-testid="stButton"] > button {
+    position: relative;
+    padding: 12px 24px;
+    background: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 0px 15px rgba(0, 204, 255, 0.5);
+    margin: 20px auto;
+    display: block;
+    z-index: 1; /* Lower the z-index to avoid the black haze */
+    backdrop-filter: none;
+    text-shadow: none;
+}
+
+[data-testid="stButton"] > button:hover {
+    background: #000000;
+    color: #ffffff;
+    box-shadow: 0 0 40px #00ccff;
+    transform: scale(1.05);
+}
+
+[data-testid="stButton"] {
+    position: relative;
+    z-index: 9998;
+}
+
+/* Base style for all circles */
+.circle {
+    position: absolute;
+    background: #00ccff;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    filter: drop-shadow(0 0 3px #00ccff);
+    transition: all 0.8s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+    z-index: -1;
+}
+
+/* Individual circle positions */
+.circle-1 { top: 10%; left: 25%; }
+.circle-2 { top: 20%; left: 60%; }
+.circle-3 { top: 0%; left: 50%; }
+.circle-4 { top: 30%; left: 15%; }
+.circle-5 { top: 35%; left: 70%; }
+.circle-6 { top: 50%; left: 10%; }
+.circle-7 { top: 55%; left: 80%; }
+.circle-8 { top: 65%; left: 40%; }
+.circle-9 { top: 75%; left: 20%; }
+.circle-10 { top: 80%; left: 60%; }
+.circle-11 { top: 85%; left: 40%; }
+.circle-12 { top: 90%; left: 50%; }
+
+/* Hover animations for circles */
+button:hover .circle-1 { top: -5%; left: 15%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-2 { top: 15%; left: 65%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-3 { top: -10%; left: 45%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-4 { top: 25%; left: 5%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-5 { top: 40%; left: 75%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-6 { top: 55%; left: -5%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-7 { top: 60%; left: 90%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-8 { top: 70%; left: 35%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-9 { top: 80%; left: 10%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-10 { top: 85%; left: 65%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-11 { top: 90%; left: 30%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+button:hover .circle-12 { top: 95%; left: 50%; width: 6px; height: 6px; filter: drop-shadow(0 0 5px #00ccff); }
+
+/* Button hover style */
+button:hover {
+    background: #000000;
+    color: #ffffff;
+    box-shadow: 0 0 40px #00ccff;
+}
+
+/* Improve contrast for text and content */
+.main-heading, .content p {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+}
+
+.box .content {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Footer styles */
+.static-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0px; /* Account for Streamlit sidebar width */
+    width: calc(100%); /* Adjust width to account for sidebar */
+    padding: 14px 0;
+    background: linear-gradient(90deg, #00b7ff 0%, #f200ff 100%);
+    color: white;
+    text-align: right;
+    font-size: 0.95em;
+    z-index: 9999;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.3px;
+}
+
+.footer-content {
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+}
+
+.static-footer span {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.static-footer a {
+    color: white;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 2px 4px;
+}
+
+.static-footer a:hover {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Ensure content doesn't get hidden behind footer */
+.centered-content {
+    padding-bottom: 60px;
+    min-height: calc(100vh - 60px);
+}
+
+/* Animated title styles */
+.changing-text {
+    display: inline-block;
+    position: relative;
+    color: #00ffff;
+}
+
+.changing-text span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    animation: rotateWords 12s linear infinite 0s;
+}
+
+.changing-text span:nth-child(2) {
+    animation-delay: 3s;
+}
+
+.changing-text span:nth-child(3) {
+    animation-delay: 6s;
+}
+
+.changing-text span:nth-child(4) {
+    animation-delay: 9s;
+}
+
+@keyframes rotateWords {
+    0% { opacity: 0; transform: translateY(20px); }
+    5% { opacity: 1; transform: translateY(0); }
+    20% { opacity: 1; transform: translateY(0); }
+    25% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 0; }
+}
+
