@@ -568,18 +568,35 @@ if st.session_state.loaded_data:
     
     # Create tabs for each class
     if all_rois_by_class:
-        tab_labels = []
-        for class_id in sorted(all_rois_by_class.keys()):
-            if 0 <= class_id < len(st.session_state.class_names):
-                label = f"{st.session_state.class_names[class_id]} ({len(all_rois_by_class[class_id])})"
-            else:
-                label = f"Unknown {class_id} ({len(all_rois_by_class[class_id])})"
-            tab_labels.append(label)
-        
+        # Get parent class mapping
+        parent_rois = {}
+        for class_id, rois in all_rois_by_class.items():
+            # Find the parent class for this class_id
+            parent_class = None
+            for parent, info in st.session_state.class_mapping.items():
+                if info['index'] == class_id:
+                    parent_class = parent
+                    break
+                # Check if it's a subclass
+                for subclass, subclass_idx in info['subclasses'].items():
+                    if subclass_idx == class_id:
+                        parent_class = parent
+                        break
+                if parent_class:
+                    break
+            
+            # Group ROIs by parent class
+            if parent_class:
+                if parent_class not in parent_rois:
+                    parent_rois[parent_class] = []
+                parent_rois[parent_class].extend(rois)
+
+        # Create tabs for parent classes only
+        tab_labels = [f"{parent} ({len(rois)})" for parent, rois in parent_rois.items()]
         tabs = st.tabs(tab_labels)
         
-        # Display ROIs in each tab
-        for idx, (class_id, rois) in enumerate(sorted(all_rois_by_class.items())):
+        # Display ROIs in each parent class tab
+        for idx, (parent_class, rois) in enumerate(parent_rois.items()):
             with tabs[idx]:
                 if clustering_method != 'none':
                     rois = cluster_rois(rois, method=clustering_method)
@@ -600,33 +617,35 @@ if st.session_state.loaded_data:
                             col.image(roi_data['roi_rgb'], use_container_width=True)
                             
                             # Delete button for each ROI
-                            if col.button(f"Delete", key=f"delete_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
-                                # Remove the annotation
+                            if col.button(f"Delete", key=f"delete_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
                                 st.session_state.loaded_data[roi_data['img_idx']]['annotations'].pop(roi_data['ann_idx'])
+                                st.experimental_rerun()
                             
-                            # Relabel controls with hierarchical class selection
-                            parent_class = col.selectbox(
-                                "Parent Class",
-                                list(st.session_state.class_hierarchy.keys()),
-                                key=f"parent_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
-                            )
+                            # Show current class
+                            current_class_name = st.session_state.class_names[roi_data['class_id']] if 0 <= roi_data['class_id'] < len(st.session_state.class_names) else "Unknown"
+                            col.text(f"Current: {current_class_name}")
                             
+                            # Subclass selection
                             subclasses = st.session_state.class_hierarchy[parent_class]
                             if subclasses:
-                                new_class = col.selectbox(
-                                    "Species",
-                                    [f"{st.session_state.class_mapping[parent_class]['subclasses'][sub]}: {sub}" 
-                                     for sub in subclasses],
-                                    key=f"subclass_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
+                                subclass_options = ["Keep as Parent Class"] + subclasses
+                                selected_subclass = col.selectbox(
+                                    "Subclass",
+                                    subclass_options,
+                                    key=f"subclass_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
                                 )
-                                new_class_id = int(new_class.split(":")[0])
+                                
+                                if selected_subclass == "Keep as Parent Class":
+                                    new_class_id = st.session_state.class_mapping[parent_class]['index']
+                                else:
+                                    new_class_id = st.session_state.class_mapping[parent_class]['subclasses'][selected_subclass]
                             else:
-                                # If no subclasses, use parent class
                                 new_class_id = st.session_state.class_mapping[parent_class]['index']
                             
-                            if col.button("Apply", key=f"apply_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
+                            if col.button("Apply", key=f"apply_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
                                 st.session_state.loaded_data[roi_data['img_idx']]['annotations'][roi_data['ann_idx']]['class_id'] = new_class_id
-                                
+                                st.experimental_rerun()
+                            
                             col.markdown("---")  # Visual separator between ROIs
                 else:
                     # Display ROIs without clustering
@@ -636,32 +655,34 @@ if st.session_state.loaded_data:
                         col.image(roi_data['roi_rgb'], use_container_width=True)
                         
                         # Delete button for each ROI
-                        if col.button(f"Delete", key=f"delete_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
-                            # Remove the annotation
+                        if col.button(f"Delete", key=f"delete_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
                             st.session_state.loaded_data[roi_data['img_idx']]['annotations'].pop(roi_data['ann_idx'])
+                            st.experimental_rerun()
                         
-                        # Relabel controls with hierarchical class selection
-                        parent_class = col.selectbox(
-                            "Parent Class",
-                            list(st.session_state.class_hierarchy.keys()),
-                            key=f"parent_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
-                        )
+                        # Show current class
+                        current_class_name = st.session_state.class_names[roi_data['class_id']] if 0 <= roi_data['class_id'] < len(st.session_state.class_names) else "Unknown"
+                        col.text(f"Current: {current_class_name}")
                         
+                        # Subclass selection
                         subclasses = st.session_state.class_hierarchy[parent_class]
                         if subclasses:
-                            new_class = col.selectbox(
-                                "Species",
-                                [f"{st.session_state.class_mapping[parent_class]['subclasses'][sub]}: {sub}" 
-                                 for sub in subclasses],
-                                key=f"subclass_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
+                            subclass_options = ["Keep as Parent Class"] + subclasses
+                            selected_subclass = col.selectbox(
+                                "Subclass",
+                                subclass_options,
+                                key=f"subclass_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"
                             )
-                            new_class_id = int(new_class.split(":")[0])
+                            
+                            if selected_subclass == "Keep as Parent Class":
+                                new_class_id = st.session_state.class_mapping[parent_class]['index']
+                            else:
+                                new_class_id = st.session_state.class_mapping[parent_class]['subclasses'][selected_subclass]
                         else:
-                            # If no subclasses, use parent class
                             new_class_id = st.session_state.class_mapping[parent_class]['index']
                         
-                        if col.button("Apply", key=f"apply_{class_id}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
+                        if col.button("Apply", key=f"apply_{roi_data['class_id']}_{roi_data['img_idx']}_{roi_data['ann_idx']}"):
                             st.session_state.loaded_data[roi_data['img_idx']]['annotations'][roi_data['ann_idx']]['class_id'] = new_class_id
+                            st.experimental_rerun()
 
     # Class management section
     st.subheader("Class Management")
