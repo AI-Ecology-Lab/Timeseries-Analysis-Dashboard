@@ -359,3 +359,106 @@ button:hover {
     100% { opacity: 0; }
 }
 
+/* Custom CSS for CSV Tools Page */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+}
+
+.stButton > button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: #2980b9;
+}
+
+.stDataFrame {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.stDataFrame table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stDataFrame th, .stDataFrame td {
+    padding: 10px;
+    text-align: left;
+}
+
+.stDataFrame th {
+    background-color: #3498db;
+    color: white;
+}
+
+.stDataFrame tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.stDataFrame tr:hover {
+    background-color: #ddd;
+}
+
+.stSidebar {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.stSidebar h2 {
+    color: #2c3e50;
+}
+
+.stSidebar .stButton > button {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.stSidebar .stButton > button:hover {
+    background-color: #c0392b;
+}
+
+.stSidebar .stFileUploader {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+}
+
+.stSidebar .stFileUploader:hover {
+    border-color: #3498db;
+}
+
+.stSelectbox, .stMultiselect, .stDateInput, .stTextInput {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+    transition: border-color 0.3s ease;
+}
+
+.stSelectbox:hover, .stMultiselect:hover, .stDateInput:hover, .stTextInput:hover {
+    border-color: #3498db;
+}
+
+.stSelectbox:focus, .stMultiselect:focus, .stDateInput:focus, .stTextInput:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+

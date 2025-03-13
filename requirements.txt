@@ -5,3 +5,5 @@ matplotlib
 plotly
 statsmodels
 scipy
+opencv-python
+scikit-learn
